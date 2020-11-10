@@ -45,15 +45,15 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
     // antMatchers().authenticated がantMatchersへのアクセスに認証を行うことを示す
     // antMatchers()の他にanyRequest()と書くとあらゆるアクセス先を表現できる
     // authenticated()の代わりにpermitAll()と書くと認証処理が不要であることを示す
-    http.authorizeRequests().antMatchers("/**").authenticated();
+    http.authorizeRequests().antMatchers("/lec06/**").authenticated();
     // http.authorizeRequests().anyRequest().authenticated();
     /**
      * 以下2行はh2-consoleを利用するための設定なので，開発が完了したらコメントアウトすることが望ましい
      * CSRFがONになっているとフォームが対応していないためアクセスできない
      * HTTPヘッダのX-Frame-OptionsがDENYになるとiframeでlocalhostでのアプリが使えなくなるので，H2DBのWebクライアントのためだけにdisableにする必要がある
      */
-    // http.csrf().disable();
-    // http.headers().frameOptions().disable();
+     http.csrf().disable();
+     http.headers().frameOptions().disable();
 
     // Spring Securityの機能を利用してログアウト．ログアウト時は http://localhost:8000/ に戻る
     http.logout().logoutSuccessUrl("/");
