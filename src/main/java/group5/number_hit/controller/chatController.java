@@ -1,5 +1,7 @@
 package group5.number_hit;
 
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +17,18 @@ public class chatController {
    *
    * @return
    */
+
   @GetMapping("/chat")
-  public String chat() {
+  public String chat(ModelMap model, Principal prin) {
+    String loginUser = prin.getName(); // ログインユーザ情報
+    model.addAttribute("login_user", loginUser);
     return "chat.html";
   }
 
   @GetMapping("/yubisuma")
-  public String yubisuma() {
+  public String yubisuma(ModelMap model, Principal prin) {
+    String loginUser = prin.getName(); // ログインユーザ情報
+    model.addAttribute("login_user", loginUser);
     return "yubisuma.html";
   }
 
