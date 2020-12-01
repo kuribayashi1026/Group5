@@ -14,6 +14,13 @@
     <a th:href="@{/result(hand=1)}">1</a>
     <a th:href="@{/result(hand=2)}">2</a>
   </p>
+
+  <form action="/match" method="post">
+    <input type="number" name="hit" />
+    <input type="submit" value="決定">
+    <input type="reset" value="リセット">
+  </form>
+
   <p>Hi [[${login_user}]]</p>
 
 
