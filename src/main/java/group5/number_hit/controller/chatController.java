@@ -1,13 +1,20 @@
-package group5.number_hit;
+package group5.number_hit.controller;
 
 import java.security.Principal;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import group5.number_hit.model.Match;
+import group5.number_hit.model.MatchInfo;
+import group5.number_hit.model.Yubisuma;
+import group5.number_hit.model.User;
+import group5.number_hit.model.UserMapper;
 
 @Controller
 public class chatController {
@@ -17,6 +24,9 @@ public class chatController {
    *
    * @return
    */
+  @Autowired
+  UserMapper userMapper;
+  private int user_id;
 
   @GetMapping("/chat")
   public String chat(ModelMap model, Principal prin) {
@@ -28,8 +38,21 @@ public class chatController {
   @GetMapping("/yubisuma")
   public String yubisuma(ModelMap model, Principal prin) {
     String loginUser = prin.getName(); // ログインユーザ情報
+
     model.addAttribute("login_user", loginUser);
     return "yubisuma.html";
+  }
+
+  @GetMapping("/result")
+  public String result(Principal prin, ModelMap model, @RequestParam Integer hand) {
+    String loginUser = prin.getName();
+    Yubisuma Yubisuma = new Yubisuma(hand);
+    Match match = new Match();
+    match.setUser_1_hand(Yubisuma.userhand);
+    match.setUser_1(user_id);
+    model.addAttribute("user", loginUser);
+    model.addAttribute("userhand", Yubisuma.userhand);
+    return "match.html";
   }
 
   /**
