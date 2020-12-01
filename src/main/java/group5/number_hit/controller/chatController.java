@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,12 @@ public class chatController {
     match.setUser_1(user_id);
     model.addAttribute("user", loginUser);
     model.addAttribute("userhand", Yubisuma.userhand);
+    return "match.html";
+  }
+
+  @PostMapping("/match")
+  public String match(@RequestParam Integer hit, ModelMap model) {
+    model.addAttribute("hit", hit);
     return "match.html";
   }
 
