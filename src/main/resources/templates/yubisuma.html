@@ -15,13 +15,16 @@
     <a th:href="@{/result(hand=2)}">2</a>
   </p>
 
-  <form action="/match" method="post">
-    <input type="number" name="hit" />
-    <input type="submit" value="決定">
-    <input type="reset" value="リセット">
-  </form>
+  <div th:if="${userid eq 1}">
+    <form action="/match" method="post">
+      <input type="number" name="hit" />
+      <input type="submit" value="決定">
+      <input type="reset" value="リセット">
+    </form>
+  </div>
 
   <p>Hi [[${login_user}]]</p>
+  <p>[[${userid}]]</p>
 
 
 
