@@ -39,8 +39,10 @@ public class chatController {
   @GetMapping("/yubisuma")
   public String yubisuma(ModelMap model, Principal prin) {
     String loginUser = prin.getName(); // ログインユーザ情報
+    User yb = userMapper.getUserDetaiByName(loginUser);
 
     model.addAttribute("login_user", loginUser);
+    model.addAttribute("userid", yb.getId());
     return "yubisuma.html";
   }
 

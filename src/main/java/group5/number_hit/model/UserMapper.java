@@ -16,4 +16,6 @@ public interface UserMapper {
   @Select("SELECT name from users where id = #{id}")
   User selectNameById(int id);
 
+  @Select("SELECT ID FROM USERS WHERE name= #{name}")
+  User getUserDetaiByName(String name);
 }
