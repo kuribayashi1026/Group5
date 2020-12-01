@@ -1,4 +1,4 @@
-package oit.is.z1623.kaizi.janken.model;
+package group5.number_hit.model;
 
 public class User {
   int id;

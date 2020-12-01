@@ -9,8 +9,14 @@
   <a href="/logout">ログアウト</a>
 
   <h1>Yubisuma</h1>
-
+  <p>
+    <a th:href="@{/result(hand=0)}">0</a>
+    <a th:href="@{/result(hand=1)}">1</a>
+    <a th:href="@{/result(hand=2)}">2</a>
+  </p>
   <p>Hi [[${login_user}]]</p>
+
+
 
 
 </body>
