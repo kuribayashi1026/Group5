@@ -9,25 +9,25 @@
   <a href="/logout">ログアウト</a>
 
   <h1>Yubisuma</h1>
-  <p>
-    <a th:href="@{/result(hand=0)}">0</a>
-    <a th:href="@{/result(hand=1)}">1</a>
-    <a th:href="@{/result(hand=2)}">2</a>
+
+  <p>あなたは<br>
+    ID: [[${user.id}]]<br>
+    Name: [[${user.name}]]<br>
+    No(入室順): [[${user.no}]]
   </p>
 
-  <div th:if="${userid eq 1}">
-    <form action="/match" method="post">
-      <input type="number" name="hit" />
-      <input type="submit" value="決定">
-      <input type="reset" value="リセット">
-    </form>
+  <div th:if="${room}">
+    ルームメンバー(入室順)<br>
+    メンバーの数: [[${room.memberNum}]]
+    <ul>
+      <li th:each="user : ${room.users}">[[${user.name}]]</li>
+    </ul>
+    <br>
   </div>
 
-  <p>Hi [[${login_user}]]</p>
-  <p>[[${userid}]]</p>
-
-
-
+  <div th:if="(not ${match.isActive}) and (${room.memberNum} gt 1)">
+    <a th:href="@{'/yubisuma/start?no=' + ${user.no}}">START</a>
+  </div>
 
 </body>
 

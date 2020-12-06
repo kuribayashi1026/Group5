@@ -22,7 +22,6 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-    // 開発中は↓の書き方でも良いが，平文でパスワードが保存される
     auth.inMemoryAuthentication().withUser("user1")
         .password("$2y$10$Pj3Nt9CXKY06BmrtG.ZFo.CxaBzHEO/.I4fnAgAPPUKxQ0Tm3Autu").roles("USER");
     auth.inMemoryAuthentication().withUser("user2")
@@ -52,9 +51,12 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
     // antMatchers().authenticated がantMatchersへのアクセスに認証を行うことを示す
     // antMatchers()の他にanyRequest()と書くとあらゆるアクセス先を表現できる
     // authenticated()の代わりにpermitAll()と書くと認証処理が不要であることを示す
+
     http.authorizeRequests().antMatchers("/yubisuma/**").authenticated();
     http.authorizeRequests().antMatchers("/chat/**").authenticated();
+
     // http.authorizeRequests().anyRequest().authenticated();
+
     /**
      * 以下2行はh2-consoleを利用するための設定なので，開発が完了したらコメントアウトすることが望ましい
      * CSRFがONになっているとフォームが対応していないためアクセスできない
@@ -63,7 +65,7 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
     http.csrf().disable();
     http.headers().frameOptions().disable();
 
-    // Spring Securityの機能を利用してログアウト．ログアウト時は http://localhost:8000/ に戻る
+    // Spring Securityの機能を利用してログアウト．ログアウト時は http://localhost:8080/ に戻る
     http.logout().logoutSuccessUrl("/");
   }
 
