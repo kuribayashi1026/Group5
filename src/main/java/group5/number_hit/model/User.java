@@ -1,8 +1,19 @@
 package group5.number_hit.model;
 
 public class User {
-  int id;
-  String name;
+  // ユーザーID
+  private int id;
+
+  // 名前
+  private String name;
+
+  public User() {
+  }
+
+  public User(int id, String name) {
+    setId(id);
+    setName(name);
+  }
 
   public int getId() {
     return id;
@@ -19,4 +30,5 @@ public class User {
   public void setName(String name) {
     this.name = name;
   }
+
 }
