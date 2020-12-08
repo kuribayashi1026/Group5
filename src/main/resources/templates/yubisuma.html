@@ -25,7 +25,7 @@
     <br>
   </div>
 
-  <div th:if="(not ${match.isActive}) and (${room.memberNum} gt 1)">
+  <div th:if=" (${room.memberNum} gt 1)">
     <a th:href="@{'/yubisuma/start?no=' + ${user.no}}">START</a>
   </div>
 

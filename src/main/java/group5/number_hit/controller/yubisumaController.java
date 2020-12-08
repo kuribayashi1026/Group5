@@ -8,7 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.ModelAttribute;
 //import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -61,6 +61,18 @@ public class yubisumaController {
     model.addAttribute("match", this.match);
 
     return "match.html";
+  }
+
+  @PostMapping("judge")
+  public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
+
+    return "judge.html";
+  }
+
+  @GetMapping("judge")
+  public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
+
+    return "judge.html";
   }
 
 }
