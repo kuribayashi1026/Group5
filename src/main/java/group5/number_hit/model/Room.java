@@ -2,23 +2,27 @@ package group5.number_hit.model;
 
 public class Room {
   // ユーザーID
-  private int user_no;
-  private int user_id;
+  private int no;
+  private int id;
 
-  public int getUser_no() {
-    return user_no;
+  public Room(int id) {
+    this.id = id;
   }
 
-  public void setUser_no(int user_no) {
-    this.user_no = user_no;
+  public int getNo() {
+    return no;
   }
 
-  public int getUser_id() {
-    return user_id;
+  public void setNo(int no) {
+    this.no = no;
   }
 
-  public void setUser_id(int user_id) {
-    this.user_id = user_id;
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
 }

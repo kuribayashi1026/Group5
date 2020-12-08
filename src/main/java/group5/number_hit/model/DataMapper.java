@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface DataMapper {
   @Select("SELECT hp FROM data ;")
-  Data selectHpById(int id);
+  Data selectDataById(int id);
 
   @Insert("INSERT INTO data(hand) VALUES(#{hand});")
   void insert_hand(int hand);
