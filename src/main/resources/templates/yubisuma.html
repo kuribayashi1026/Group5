@@ -13,20 +13,19 @@
   <p>あなたは<br>
     ID: [[${user.id}]]<br>
     Name: [[${user.name}]]<br>
-    No(入室順): [[${user.no}]]
   </p>
 
   <div th:if="${room}">
     ルームメンバー(入室順)<br>
-    メンバーの数: [[${room.memberNum}]]
+    メンバーの数: [[${userNum}]]
     <ul>
-      <li th:each="user : ${room.users}">[[${user.name}]]</li>
+      <li th:each="r : ${room}">[[${r.id}]]</li>
     </ul>
     <br>
   </div>
 
-  <div th:if=" (${room.memberNum} gt 1)">
-    <a th:href="@{'/yubisuma/start?no=' + ${user.no}}">START</a>
+  <div th:if=" (${userNum} gt 1)">
+    <a th:href="@{'/yubisuma/start?no=' + ${user.id}}">START</a>
   </div>
 
 </body>

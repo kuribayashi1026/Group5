@@ -1,6 +1,7 @@
 package group5.number_hit.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import group5.number_hit.model.Match;
 import group5.number_hit.model.MatchUser;
+import group5.number_hit.model.Room;
+import group5.number_hit.model.RoomMapper;
 import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
 import group5.number_hit.model.YubisumaRoom;
-import group5.number_hit.model.Data;
+//import group5.number_hit.model.Data;
 import group5.number_hit.model.DataMapper;
 
 @Controller
@@ -28,40 +31,45 @@ public class yubisumaController {
   UserMapper userMapper;
 
   @Autowired
+  RoomMapper roomMapper;
+
+  @Autowired
+  DataMapper dataMapper;
+
+  @Autowired
   YubisumaRoom room;
 
   @Autowired
   Match match;
-
-  @Autowired
-  DataMapper dataMapper;
 
   @GetMapping("index")
   public String yubisuma01(ModelMap model, Principal prin) {
 
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
-    MatchUser m_user = new MatchUser(user);
 
     // 入室
-    this.room.addUser(m_user);
+    Room r = new Room(user.getId());
+    roomMapper.insert_user(r);
+    ArrayList<Room> room = roomMapper.selectAll();
+    int userNum = roomMapper.countAllUsers();
 
-    model.addAttribute("user", m_user);
-    model.addAttribute("room", this.room);
-    model.addAttribute("match", this.match);
+    model.addAttribute("user", user);
+    model.addAttribute("room", room);
+    model.addAttribute("userNum", userNum);
 
     return "yubisuma.html";
   }
 
   @GetMapping("start")
-  public String yubisuma02(@RequestParam Integer no, ModelMap model, Principal prin) {
+  public String yubisuma02(@RequestParam Integer id, ModelMap model, Principal prin) {
 
-    MatchUser m_user = this.room.getUser(no);
+    User user = userMapper.selectUserById(id);
 
     // match開始
     this.match.matchInit(room);
 
-    model.addAttribute("user", m_user);
+    model.addAttribute("user", user);
     model.addAttribute("room", this.room);
     model.addAttribute("match", this.match);
 
