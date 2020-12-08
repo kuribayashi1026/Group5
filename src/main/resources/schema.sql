@@ -6,3 +6,9 @@ CREATE TABLE yubisuma_room (
     user_no IDENTITY,
     user_id INT NOT NULL
 );
+CREATE TABLE data (
+    id INT,
+    hp INT,
+    hand INT,
+    hit INT
+);

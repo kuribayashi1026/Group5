@@ -17,6 +17,8 @@ import group5.number_hit.model.MatchUser;
 import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
 import group5.number_hit.model.YubisumaRoom;
+import group5.number_hit.model.Data;
+import group5.number_hit.model.DataMapper;
 
 @Controller
 @RequestMapping("/yubisuma")
@@ -30,6 +32,9 @@ public class yubisumaController {
 
   @Autowired
   Match match;
+
+  @Autowired
+  DataMapper dataMapper;
 
   @GetMapping("index")
   public String yubisuma01(ModelMap model, Principal prin) {
@@ -71,6 +76,10 @@ public class yubisumaController {
 
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
+
+    dataMapper.insert_hand(hand);
+
+    model.addAttribute("hand", hand);
 
     return "judge.html";
   }
