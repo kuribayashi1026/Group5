@@ -12,3 +12,8 @@ CREATE TABLE data (
     hand INT,
     hit INT
 );
+CREATE TABLE talk (
+    id INT,
+    name CHAR,
+    talk CHAR
+);
