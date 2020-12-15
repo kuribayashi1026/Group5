@@ -13,35 +13,32 @@
   <p>あなたは<br>
     ID: [[${user.id}]]<br>
     Name: [[${user.name}]]<br>
-    No(入室順): [[${user.no}]]
+    NO:[[${no}]]
   </p>
 
   <div th:if="${room}">
     ルームメンバー(入室順)<br>
-    メンバーの数: [[${room.memberNum}]]
+    メンバーの数: [[${userNum}]]
     <ul>
-      <li th:each="user : ${room.users}">[[${user.name}]]</li>
+      <li th:each="r : ${room}">[[${r.id}]]</li>
     </ul>
     <br>
   </div>
-
-  <div th:if="${match.isActive}">
-    <p>残りの手の数: [[${user.handNum}]]</p>
-    <div th:if="${user.no ne 0}">
-      <p>あなたが上げる指の数を選んでください</p>
-      <a th:href="@{/yubisuma/judge(hand=0)}">[0]</a>
-      <a th:href="@{/yubisuma/judge(hand=1)}">[1]</a>
-      <a th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
-    </div>
-
-    <div th:if="${user.no eq 0}">
-      <p>あなたは親です<br>指の数を当ててください</p>
-      <form action="/yubisuma/judge" method="post">
-        <input type="number" name="hit">
-        <input type="submit" value="決定">
-        <input type="reset" value="リセット">
-      </form>
-    </div>
+  <p>残りの手の数: 1</p>
+  <div th:if="${no ne 1}">
+    <p>あなたが上げる指の数を選んでください</p>
+    <a th:href="@{/yubisuma/judge(hand=0)}">[0]</a>
+    <a th:href="@{/yubisuma/judge(hand=1)}">[1]</a>
+    <a th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
+  </div>
+  <div th:if="${no eq 1}">
+    <p>あなたは親です<br>指の数を当ててください</p>
+    <form action="/yubisuma/judge" method="post">
+      <input type="number" name="hit">
+      <input type="submit" value="決定">
+      <input type="reset" value="リセット">
+    </form>
+  </div>
   </div>
 </body>
 

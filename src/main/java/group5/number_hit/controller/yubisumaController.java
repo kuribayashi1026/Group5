@@ -62,23 +62,24 @@ public class yubisumaController {
   }
 
   @GetMapping("start")
-  public String yubisuma02(@RequestParam Integer id, ModelMap model, Principal prin) {
+  public String yubisuma02(@RequestParam Integer no, ModelMap model, Principal prin) {
 
+    int id = roomMapper.selectIdByNo(no);
     User user = userMapper.selectUserById(id);
-
-    // match開始
-    this.match.matchInit(room);
+    ArrayList<Room> room = roomMapper.selectAll();
+    int userNum = roomMapper.countAllUsers();
 
     model.addAttribute("user", user);
-    model.addAttribute("room", this.room);
-    model.addAttribute("match", this.match);
-
+    model.addAttribute("room", room);
+    model.addAttribute("userNum", userNum);
+    model.addAttribute("no", no);
     return "match.html";
   }
 
   @PostMapping("judge")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
-
+    dataMapper.insert_hit(hit);
+    model.addAttribute("hit", hit);
     return "judge.html";
   }
 
