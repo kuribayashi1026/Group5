@@ -5,7 +5,8 @@ public class Room {
   private int no;
   private int id;
 
-  public Room(int id) {
+  public Room(int no, int id) {
+    this.no = no;
     this.id = id;
   }
 

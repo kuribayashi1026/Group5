@@ -40,8 +40,12 @@ public class yubisumaController {
     User user = userMapper.selectUserByName(prin.getName());
 
     // 入室
-    Room r = new Room(user.getId());
-    roomMapper.insertUser(r);
+    //Room r = new Room(roomMapper.countAllUsers(), user.getId());
+
+    Room r = roomMapper.selectRoomById(user.getId());
+    if(r == null){
+      roomMapper.insertUser(roomMapper.countAllUsers(), user.getId());
+    }
     ArrayList<Room> room = roomMapper.selectAll();
     int userNum = roomMapper.countAllUsers();
 

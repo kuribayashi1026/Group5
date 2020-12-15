@@ -18,10 +18,16 @@ public interface RoomMapper {
   @Select("SELECT id FROM yubisuma_room WHERE no = #{no}")
   int selectIdByNo(int no);
 
+  @Select("SELECT id FROM yubisuma_room WHERE id = #{id}")
+  int selectIdById(int id);
+
+  @Select("SELECT * FROM yubisuma_room WHERE id = #{id}")
+  Room selectRoomById(int id);
+
   @Select("SELECT COUNT( * ) FROM  yubisuma_room ;")
   int countAllUsers();
 
-  @Insert("INSERT INTO yubisuma_room(id) VALUES(#{id});")
-  @Options(useGeneratedKeys = true, keyColumn = "no", keyProperty = "no")
-  void insertUser(Room room);
+  @Insert("INSERT INTO yubisuma_room(no, id) VALUES(#{no}, #{id});")
+  //@Options(useGeneratedKeys = true, keyColumn = "no", keyProperty = "no")
+  void insertUser(int no, int id);
 }
