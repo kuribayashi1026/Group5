@@ -15,6 +15,9 @@ public interface RoomMapper {
   @Select("SELECT no FROM yubisuma_room WHERE id = #{id}")
   int selectNoById(int id);
 
+  @Select("SELECT id FROM yubisuma_room WHERE no = #{no}")
+  int selectIdByNo(int no);
+
   @Select("SELECT COUNT( * ) FROM  yubisuma_room ;")
   int countAllUsers();
 
