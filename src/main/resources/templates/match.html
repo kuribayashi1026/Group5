@@ -24,13 +24,16 @@
     </ul>
     <br>
   </div>
+
   <p>残りの手の数: 1</p>
+
   <div th:if="${no ne 1}">
     <p>あなたが上げる指の数を選んでください</p>
     <a th:href="@{/yubisuma/judge(hand=0)}">[0]</a>
     <a th:href="@{/yubisuma/judge(hand=1)}">[1]</a>
     <a th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
   </div>
+
   <div th:if="${no eq 1}">
     <p>あなたは親です<br>指の数を当ててください</p>
     <form action="/yubisuma/judge" method="post">
@@ -39,7 +42,7 @@
       <input type="reset" value="リセット">
     </form>
   </div>
-  </div>
+
 </body>
 
 </html>

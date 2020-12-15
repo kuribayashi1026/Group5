@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import group5.number_hit.model.Match;
-import group5.number_hit.model.MatchUser;
 import group5.number_hit.model.Room;
 import group5.number_hit.model.RoomMapper;
 import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
-import group5.number_hit.model.YubisumaRoom;
 //import group5.number_hit.model.Data;
 import group5.number_hit.model.DataMapper;
 
@@ -36,12 +33,6 @@ public class yubisumaController {
   @Autowired
   DataMapper dataMapper;
 
-  @Autowired
-  YubisumaRoom room;
-
-  @Autowired
-  Match match;
-
   @GetMapping("index")
   public String yubisuma01(ModelMap model, Principal prin) {
 
@@ -50,7 +41,7 @@ public class yubisumaController {
 
     // 入室
     Room r = new Room(user.getId());
-    roomMapper.insert_user(r);
+    roomMapper.insertUser(r);
     ArrayList<Room> room = roomMapper.selectAll();
     int userNum = roomMapper.countAllUsers();
 
@@ -62,33 +53,65 @@ public class yubisumaController {
   }
 
   @GetMapping("start")
-  public String yubisuma02(@RequestParam Integer no, ModelMap model, Principal prin) {
+  public String yubisuma02(ModelMap model, Principal prin) {
 
-    int id = roomMapper.selectIdByNo(no);
-    User user = userMapper.selectUserById(id);
+    // ログインユーザ情報
+    User user = userMapper.selectUserByName(prin.getName());
+    // int no = roomMapper.selectNoById(user.getId());
+    int no;
+    if (user.getId() == 1)
+      no = 1;
+    else
+      no = 2;
+
+    // ユーザに対応するDataを追加
+    dataMapper.insertData(user.getId());
+
+    // ルームリストを取得
     ArrayList<Room> room = roomMapper.selectAll();
+    // ルームに入室している数を取得
     int userNum = roomMapper.countAllUsers();
 
     model.addAttribute("user", user);
     model.addAttribute("room", room);
     model.addAttribute("userNum", userNum);
     model.addAttribute("no", no);
+
     return "match.html";
   }
 
   @PostMapping("judge")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
-    dataMapper.insert_hit(hit);
+
+    // ログインユーザ情報
+    User user = userMapper.selectUserByName(prin.getName());
+
+    // hit, handの更新
+    dataMapper.updateHit(user.getId(), hit);
+    dataMapper.updateHand(user.getId(), 0);
+
+    // 手の数の合計の取得
+    int handsNum = dataMapper.selectSumHands();
+
     model.addAttribute("hit", hit);
+    model.addAttribute("handsNum", handsNum);
+
     return "judge.html";
   }
 
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
+    // ログインユーザ情報
+    User user = userMapper.selectUserByName(prin.getName());
 
-    dataMapper.insert_hand(hand);
+    // handの更新
+    dataMapper.updateHand(user.getId(), hand);
+
+    // 手の数の合計の取得
+    int handsNum = dataMapper.selectSumHands();
 
     model.addAttribute("hand", hand);
+    model.addAttribute("handsNum", handsNum);
 
     return "judge.html";
   }

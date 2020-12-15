@@ -23,5 +23,5 @@ public interface RoomMapper {
 
   @Insert("INSERT INTO yubisuma_room(id) VALUES(#{id});")
   @Options(useGeneratedKeys = true, keyColumn = "no", keyProperty = "no")
-  void insert_user(Room room);
+  void insertUser(Room room);
 }
