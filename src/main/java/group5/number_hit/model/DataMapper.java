@@ -12,6 +12,6 @@ public interface DataMapper {
   @Insert("INSERT INTO data(hand) VALUES(#{hand});")
   void insert_hand(int hand);
 
-  @Insert("INSERT INTO data(hand) VALUES(#{hit});")
+  @Insert("INSERT INTO data(hit) VALUES(#{hit});")
   void insert_hit(int hit);
 }
