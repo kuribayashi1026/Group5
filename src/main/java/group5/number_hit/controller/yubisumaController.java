@@ -84,6 +84,7 @@ public class yubisumaController {
     return "match.html";
   }
 
+  //親
   @PostMapping("judge")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
 
@@ -97,12 +98,22 @@ public class yubisumaController {
     // 手の数の合計の取得
     int handsNum = dataMapper.selectSumHands();
 
+    String txt;
+
+    if(hit == handsNum){
+      txt = "当たり";
+    } else {
+      txt = "はずれ";
+    }
+
     model.addAttribute("hit", hit);
     model.addAttribute("handsNum", handsNum);
+    model.addAttribute("txt", txt);
 
     return "judge.html";
   }
 
+  //子
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
     // ログインユーザ情報
