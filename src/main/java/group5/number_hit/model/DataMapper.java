@@ -13,6 +13,9 @@ public interface DataMapper {
   @Select("SELECT SUM(hand) from data")
   int selectSumHands();
 
+  @Select("SELECT hp from data WHERE id = #{id};")
+  int selectHpById(int id);
+
   @Insert("INSERT INTO data(id, hp) VALUES(#{id}, 2);")
   void insertData(int id);
 
@@ -21,5 +24,8 @@ public interface DataMapper {
 
   @Update("UPDATE data SET hit = #{hit} WHERE id = #{id};")
   void updateHit(int id, int hit);
+
+  @Update("UPDATE data SET hp = #{hp} WHERE id = #{id};")
+  void updateHp(int id, int hp);
 
 }
