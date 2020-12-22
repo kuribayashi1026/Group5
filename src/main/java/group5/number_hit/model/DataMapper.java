@@ -16,6 +16,9 @@ public interface DataMapper {
   @Select("SELECT hp from data WHERE id = #{id};")
   int selectHpById(int id);
 
+  @Select("SELECT hit from data WHERE id = #{id};")
+  int selectHitById(int id);
+
   @Insert("INSERT INTO data(id, hp) VALUES(#{id}, 2);")
   void insertData(int id);
 
