@@ -40,10 +40,10 @@ public class yubisumaController {
     User user = userMapper.selectUserByName(prin.getName());
 
     // 入室
-    //Room r = new Room(roomMapper.countAllUsers(), user.getId());
+    // Room r = new Room(roomMapper.countAllUsers(), user.getId());
 
     Room r = roomMapper.selectRoomById(user.getId());
-    if(r == null){
+    if (r == null) {
       roomMapper.insertUser(roomMapper.countAllUsers(), user.getId());
     }
     ArrayList<Room> room = roomMapper.selectAll();
@@ -71,6 +71,10 @@ public class yubisumaController {
     // ユーザに対応するDataを追加
     dataMapper.insertData(user.getId());
 
+    // hp取得
+    int hp = dataMapper.selectHpById(user.getId());
+    model.addAttribute("hp", hp);
+
     // ルームリストを取得
     ArrayList<Room> room = roomMapper.selectAll();
     // ルームに入室している数を取得
@@ -84,7 +88,7 @@ public class yubisumaController {
     return "match.html";
   }
 
-  //親
+  // 親
   @PostMapping("judge")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
 
@@ -97,15 +101,18 @@ public class yubisumaController {
 
     // 手の数の合計の取得
     int handsNum = dataMapper.selectSumHands();
-
+    // hp取得
+    int hp = dataMapper.selectHpById(user.getId());
     String txt;
 
-    if(hit == handsNum){
+    if (hit == handsNum) {
       txt = "当たり";
+      hp = hp - 1;
+      dataMapper.updateHp(user.getId(), hp);
     } else {
       txt = "はずれ";
     }
-
+    model.addAttribute("hp", hp);
     model.addAttribute("hit", hit);
     model.addAttribute("handsNum", handsNum);
     model.addAttribute("txt", txt);
@@ -113,18 +120,19 @@ public class yubisumaController {
     return "judge.html";
   }
 
-  //子
+  // 子
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
-
+    int hp = dataMapper.selectHpById(user.getId());
     // handの更新
     dataMapper.updateHand(user.getId(), hand);
 
     // 手の数の合計の取得
     int handsNum = dataMapper.selectSumHands();
 
+    model.addAttribute("hp", hp);
     model.addAttribute("hand", hand);
     model.addAttribute("handsNum", handsNum);
 
