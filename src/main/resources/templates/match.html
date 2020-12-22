@@ -36,7 +36,7 @@
 
   <div th:if="${no eq 1}">
     <p>あなたは親です<br>指の数を当ててください</p>
-    <form action="/yubisuma/judge" method="post">
+    <form action="/yubisuma/selecthand" method="post">
       <input type="number" name="hit">
       <input type="submit" value="決定">
       <input type="reset" value="リセット">

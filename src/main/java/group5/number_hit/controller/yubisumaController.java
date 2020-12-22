@@ -89,35 +89,16 @@ public class yubisumaController {
   }
 
   // 親
-  @PostMapping("judge")
+  @PostMapping("selecthand")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
 
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
 
-    // hit, handの更新
+    // hit
     dataMapper.updateHit(user.getId(), hit);
-    dataMapper.updateHand(user.getId(), 0);
 
-    // 手の数の合計の取得
-    int handsNum = dataMapper.selectSumHands();
-    // hp取得
-    int hp = dataMapper.selectHpById(user.getId());
-    String txt;
-
-    if (hit == handsNum) {
-      txt = "当たり";
-      hp = hp - 1;
-      dataMapper.updateHp(user.getId(), hp);
-    } else {
-      txt = "はずれ";
-    }
-    model.addAttribute("hp", hp);
-    model.addAttribute("hit", hit);
-    model.addAttribute("handsNum", handsNum);
-    model.addAttribute("txt", txt);
-
-    return "judge.html";
+    return "oyahand.html";
   }
 
   // 子
@@ -126,12 +107,24 @@ public class yubisumaController {
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
     int hp = dataMapper.selectHpById(user.getId());
+    int no = roomMapper.selectNoById(user.getId());
     // handの更新
     dataMapper.updateHand(user.getId(), hand);
 
     // 手の数の合計の取得
     int handsNum = dataMapper.selectSumHands();
-
+    String txt = "";
+    if (no == 1) {
+      int hit = dataMapper.selectHitById(user.getId());
+      if (hit == handsNum) {
+        txt = "当たり";
+        hp = hp - 1;
+        dataMapper.updateHp(user.getId(), hp);
+      } else {
+        txt = "はずれ";
+      }
+    }
+    model.addAttribute("txt", txt);
     model.addAttribute("hp", hp);
     model.addAttribute("hand", hand);
     model.addAttribute("handsNum", handsNum);
