@@ -19,6 +19,7 @@ import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
 //import group5.number_hit.model.Data;
 import group5.number_hit.model.DataMapper;
+import group5.number_hit.model.ManeageOya;
 
 @Controller
 @RequestMapping("/yubisuma")
@@ -33,6 +34,9 @@ public class yubisumaController {
   @Autowired
   DataMapper dataMapper;
 
+  @Autowired
+  private ManeageOya oyaNum;
+
   @GetMapping("index")
   public String yubisuma01(ModelMap model, Principal prin) {
 
@@ -40,12 +44,11 @@ public class yubisumaController {
     User user = userMapper.selectUserByName(prin.getName());
 
     // 入室
-    // Room r = new Room(roomMapper.countAllUsers(), user.getId());
-
     Room r = roomMapper.selectRoomById(user.getId());
     if (r == null) {
       roomMapper.insertUser(roomMapper.countAllUsers(), user.getId());
     }
+
     ArrayList<Room> room = roomMapper.selectAll();
     int userNum = roomMapper.countAllUsers();
 
@@ -61,12 +64,9 @@ public class yubisumaController {
 
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
-    // int no = roomMapper.selectNoById(user.getId());
-    int no;
-    if (user.getId() == 1)
-      no = 1;
-    else
-      no = 2;
+
+    // no取得
+    int no = roomMapper.selectNoById(user.getId());
 
     // ユーザに対応するDataを追加
     dataMapper.insertData(user.getId());
@@ -77,6 +77,7 @@ public class yubisumaController {
 
     // ルームリストを取得
     ArrayList<Room> room = roomMapper.selectAll();
+
     // ルームに入室している数を取得
     int userNum = roomMapper.countAllUsers();
 
@@ -84,6 +85,7 @@ public class yubisumaController {
     model.addAttribute("room", room);
     model.addAttribute("userNum", userNum);
     model.addAttribute("no", no);
+    model.addAttribute("oyaNum", oyaNum.getOyaNum());
 
     return "match.html";
   }
@@ -95,7 +97,7 @@ public class yubisumaController {
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
 
-    // hit
+    // hitの更新
     dataMapper.updateHit(user.getId(), hit);
 
     return "oyahand.html";
@@ -104,26 +106,36 @@ public class yubisumaController {
   // 子
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
+
     // ログインユーザ情報
     User user = userMapper.selectUserByName(prin.getName());
-    int hp = dataMapper.selectHpById(user.getId());
-    int no = roomMapper.selectNoById(user.getId());
     // handの更新
     dataMapper.updateHand(user.getId(), hand);
-
+    // noの取得
+    int no = roomMapper.selectNoById(user.getId());
+    // hpの取得
+    int hp = dataMapper.selectHpById(user.getId());
     // 手の数の合計の取得
     int handsNum = dataMapper.selectSumHands();
+
     String txt = "";
-    if (no == 1) {
+
+    if (no == oyaNum.getOyaNum()) {
+      // hitの取得
       int hit = dataMapper.selectHitById(user.getId());
+
       if (hit == handsNum) {
         txt = "当たり";
-        hp = hp - 1;
-        dataMapper.updateHp(user.getId(), hp);
+
+        // hpを1減らす
+        dataMapper.updateHp(user.getId(), --hp);
       } else {
         txt = "はずれ";
       }
     }
+
+    model.addAttribute("user", user);
+    model.addAttribute("no", no);
     model.addAttribute("txt", txt);
     model.addAttribute("hp", hp);
     model.addAttribute("hand", hand);

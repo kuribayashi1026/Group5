@@ -1,5 +1,32 @@
-[[${hand}]]<br>
-[[${hit}]]<br>
-手の数の合計:[[${handsNum}]]<br>
-残りHP:[[${hp}]]<br>
-[[${txt}]]<br>
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <a href="/logout">ログアウト</a>
+
+  <h1>Yubisuma</h1>
+
+  <p>あなたは<br>
+    ID: [[${user.id}]]<br>
+    Name: [[${user.name}]]<br>
+    NO:[[${no}]]
+  <p>残りの手の数:[[${hp}]]</p>
+  </p>
+
+
+  手の数の合計:[[${handsNum}]]<br>
+
+  <div th:if="${txt}">
+    [[${txt}]]
+  </div>
+
+  [[${hand}]]<br>
+  [[${hit}]]<br>
+
+</body>
+
+</html>

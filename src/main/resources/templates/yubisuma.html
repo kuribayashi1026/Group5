@@ -17,7 +17,7 @@
 
   <div th:if="${room}">
     ルームメンバー(入室順)<br>
-    メンバーの数: [[${userNum}]]
+    メンバーの数: [[${userNum}]]<br>
     <ul>
       <li th:each="r : ${room}">[[${r.id}]]</li>
     </ul>

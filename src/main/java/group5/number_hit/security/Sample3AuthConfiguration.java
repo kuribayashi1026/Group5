@@ -53,6 +53,7 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
     // authenticated()の代わりにpermitAll()と書くと認証処理が不要であることを示す
 
     http.authorizeRequests().antMatchers("/yubisuma/**").authenticated();
+    http.authorizeRequests().antMatchers("/yubisuma_async/**").authenticated();
     http.authorizeRequests().antMatchers("/chat/**").authenticated();
 
     // http.authorizeRequests().anyRequest().authenticated();
