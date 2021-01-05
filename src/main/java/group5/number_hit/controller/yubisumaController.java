@@ -71,7 +71,7 @@ public class yubisumaController {
     // ユーザに対応するDataを追加
     Data d = dataMapper.selectDataById(user.getId());
     if (d == null) {
-    dataMapper.insertData(user.getId());
+      dataMapper.insertData(user.getId());
     }
 
     // hp取得
@@ -83,6 +83,51 @@ public class yubisumaController {
 
     // ルームに入室している数を取得
     int userNum = roomMapper.countAllUsers();
+
+    model.addAttribute("user", user);
+    model.addAttribute("room", room);
+    model.addAttribute("userNum", userNum);
+    model.addAttribute("no", no);
+    model.addAttribute("oyaNum", oyaNum.getOyaNum());
+
+    return "match.html";
+  }
+
+  @GetMapping("next")
+  public String yubisuma02_1(ModelMap model, Principal prin) {
+
+    // ログインユーザ情報
+    User user = userMapper.selectUserByName(prin.getName());
+
+    // no取得
+    int no = roomMapper.selectNoById(user.getId());
+
+    // hp取得
+    int hp = dataMapper.selectHpById(user.getId());
+    model.addAttribute("hp", hp);
+
+    // ルームリストを取得
+    ArrayList<Room> room = roomMapper.selectAll();
+
+    // ルームに入室している数を取得
+    int userNum = roomMapper.countAllUsers();
+
+    int flag = 1;
+
+    ArrayList<Data> datalist = dataMapper.selectAll();
+
+    for (Data d : datalist) {
+      if (d.getFlag() == 0) {
+        flag = 0;
+        break;
+      }
+    }
+    if (flag == 1) {
+      oyaNum.next(userNum);
+      for (Room r : room) {
+        dataMapper.updateFlag(r.getId(), 0);
+      }
+    }
 
     model.addAttribute("user", user);
     model.addAttribute("room", room);
@@ -129,8 +174,8 @@ public class yubisumaController {
 
     ArrayList<Data> datalist = dataMapper.selectAll();
 
-    for (Data d: datalist){
-      if(d.getFlag() == 0){
+    for (Data d : datalist) {
+      if (d.getFlag() == 0) {
         flag = 0;
         break;
       }
