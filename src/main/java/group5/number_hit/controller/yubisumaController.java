@@ -17,7 +17,7 @@ import group5.number_hit.model.Room;
 import group5.number_hit.model.RoomMapper;
 import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
-//import group5.number_hit.model.Data;
+import group5.number_hit.model.Data;
 import group5.number_hit.model.DataMapper;
 import group5.number_hit.model.ManeageOya;
 
@@ -69,7 +69,10 @@ public class yubisumaController {
     int no = roomMapper.selectNoById(user.getId());
 
     // ユーザに対応するDataを追加
+    Data d = dataMapper.selectDataById(user.getId());
+    if (d == null) {
     dataMapper.insertData(user.getId());
+    }
 
     // hp取得
     int hp = dataMapper.selectHpById(user.getId());
@@ -120,7 +123,20 @@ public class yubisumaController {
 
     String txt = "";
 
-    if (no == oyaNum.getOyaNum()) {
+    int flag = 1;
+
+    dataMapper.updateFlag(user.getId(), flag);
+
+    ArrayList<Data> datalist = dataMapper.selectAll();
+
+    for (Data d: datalist){
+      if(d.getFlag() == 0){
+        flag = 0;
+        break;
+      }
+    }
+
+    if (no == oyaNum.getOyaNum() && flag == 1) {
       // hitの取得
       int hit = dataMapper.selectHitById(user.getId());
 
@@ -140,6 +156,7 @@ public class yubisumaController {
     model.addAttribute("hp", hp);
     model.addAttribute("hand", hand);
     model.addAttribute("handsNum", handsNum);
+    model.addAttribute("flag", flag);
 
     return "judge.html";
   }

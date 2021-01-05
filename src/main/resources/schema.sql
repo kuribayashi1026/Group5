@@ -11,7 +11,8 @@ CREATE TABLE data (
     id INT NOT NULL PRIMARY KEY,
     hp INT NOT NULL,
     hand INT,
-    hit INT
+    hit INT,
+    flag INT
 );
 CREATE TABLE talk (
     id INT PRIMARY KEY,
