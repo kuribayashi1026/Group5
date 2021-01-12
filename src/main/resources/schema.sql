@@ -4,8 +4,8 @@ CREATE TABLE users (
 );
 CREATE TABLE yubisuma_room (
     no INT NOT NULL,
-    id INT NOT NULL,
-    PRIMARY KEY (id)
+    id INT NOT NULL PRIMARY KEY,
+    name CHAR NOT NULL
 );
 CREATE TABLE data (
     id INT NOT NULL PRIMARY KEY,

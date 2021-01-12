@@ -10,21 +10,32 @@
 
   <h1>Yubisuma</h1>
 
-  <p>あなたは<br>
-    ID: [[${user.id}]]<br>
-    Name: [[${user.name}]]<br>
-  </p>
+  <p>あなたは</p>
+  <ul>
+    <li>NO: [[${user.no}]]</li>
+    <li>ID: [[${user.id}]]</li>
+    <li>Name: [[${user.name}]]</li>
+  </ul>
 
   <div th:if="${room}">
     ルームメンバー(入室順)<br>
     メンバーの数: [[${userNum}]]<br>
-    <ul>
-      <li th:each="r : ${room}">[[${r.id}]]</li>
-    </ul>
-    <br>
+    <table border="1">
+      <tr>
+        <th>No</th>
+        <th>ID</th>
+        <th>Name</th>
+      </tr>
+      <tr th:each="r : ${room}">
+        <td align="center">[[${r.no}]]</td>
+        <td align="center">[[${r.id}]]</td>
+        <td align="center">[[${r.name}]]</td>
+      </tr>
+    </table>
   </div>
 
   <div th:if=" (${userNum} gt 1)">
+    <br>
     <a href="/yubisuma/start">START</a>
   </div>
 

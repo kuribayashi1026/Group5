@@ -39,11 +39,13 @@ public class Data {
     this.hit = hit;
   }
 
-  public int getFlag(){
+  public int getFlag() {
     return flag;
   }
 
-  public void setFlag(int flag){
+  public void setFlag(int flag) {
+    if (flag != 0)
+      flag = 1;
     this.flag = flag;
   }
 
