@@ -23,7 +23,12 @@
 
   <div th:if="${flag}">
     <p>[[${result}]]</p>
-    <a href="/yubisuma/next">次へ</a>
+    <div th:if="(${v} eq 1)">
+      <a href="/index.html">最初へ</a>
+    </div>
+    <div th:if="${v} eq 0">
+      <a href="/yubisuma/next">次へ</a>
+    </div>
   </div>
 
 </body>

@@ -17,15 +17,19 @@ import group5.number_hit.model.Room;
 import group5.number_hit.model.RoomMapper;
 import group5.number_hit.model.UserMapper;
 import group5.number_hit.model.Data;
+import group5.number_hit.model.Endgame;
 import group5.number_hit.model.DataMapper;
 import group5.number_hit.model.ManeageOya;
 
 @Controller
 @RequestMapping("/yubisuma")
-public class YubisumaController {
+public class yubisumaController {
 
   @Autowired
   UserMapper userMapper;
+
+  @Autowired
+  Endgame endgame;
 
   @Autowired
   RoomMapper roomMapper;
@@ -174,7 +178,6 @@ public class YubisumaController {
         break;
       }
     }
-
     // ユーザーのデータを取得
     Data data = dataMapper.selectDataById(user.getId());
 
@@ -185,6 +188,11 @@ public class YubisumaController {
         // hpを1減らす
         dataMapper.updateHp(user.getId(), data.getHp() - 1);
         data = dataMapper.selectDataById(user.getId());
+        if (data.getHp() == 0) {
+          endgame.setV(1);
+          result = "あなたの勝利！";
+
+        }
       } else {
         result = "はずれ";
       }
@@ -194,7 +202,7 @@ public class YubisumaController {
       int oyaHit = data.getHit();
       model.addAttribute("oyaHit", oyaHit);
     }
-
+    model.addAttribute("v", endgame.getV());
     model.addAttribute("user", user);
     model.addAttribute("data", data);
     model.addAttribute("result", result);

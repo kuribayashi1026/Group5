@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/chat")
-public class ChatController {
+public class chatController {
 
   @GetMapping("index")
   public String chat(ModelMap model, Principal prin) {
