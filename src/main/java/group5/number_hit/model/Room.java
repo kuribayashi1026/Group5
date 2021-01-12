@@ -4,10 +4,12 @@ public class Room {
   // ユーザーID
   private int no;
   private int id;
+  private String name;
 
-  public Room(int no, int id) {
+  public Room(int no, int id, String name) {
     this.no = no;
     this.id = id;
+    this.name = name;
   }
 
   public int getNo() {
@@ -24,6 +26,14 @@ public class Room {
 
   public void setId(int id) {
     this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
 }

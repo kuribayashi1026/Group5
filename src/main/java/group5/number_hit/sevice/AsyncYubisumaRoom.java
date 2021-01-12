@@ -13,12 +13,16 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import group5.number_hit.model.Room;
 import group5.number_hit.model.RoomMapper;
+import group5.number_hit.model.UserMapper;
 
 @Service
 public class AsyncYubisumaRoom {
   boolean dbUpdated = false;
 
   private final Logger logger = LoggerFactory.getLogger(AsyncYubisumaRoom.class);
+
+  @Autowired
+  UserMapper uMapper;
 
   @Autowired
   RoomMapper rMapper;
@@ -32,7 +36,7 @@ public class AsyncYubisumaRoom {
     Room r = rMapper.selectRoomById(id);
 
     if (r == null) {
-      rMapper.insertUser(rMapper.countAllUsers(), id);
+      rMapper.insertUser(rMapper.countAllUsers(), id, uMapper.selectNameById(id));
       this.dbUpdated = true;
     }
   }

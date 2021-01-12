@@ -25,7 +25,7 @@ import group5.number_hit.model.DataMapper;
 
 @Controller
 @RequestMapping("/yubisuma_async")
-public class asyncYubisumaController {
+public class AsyncYubisumaController {
 
   @Autowired
   UserMapper userMapper;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import group5.number_hit.model.Room;
 import group5.number_hit.model.RoomMapper;
-import group5.number_hit.model.User;
 import group5.number_hit.model.UserMapper;
 import group5.number_hit.model.Data;
 import group5.number_hit.model.DataMapper;
@@ -23,7 +22,7 @@ import group5.number_hit.model.ManeageOya;
 
 @Controller
 @RequestMapping("/yubisuma")
-public class yubisumaController {
+public class YubisumaController {
 
   @Autowired
   UserMapper userMapper;
@@ -41,12 +40,18 @@ public class yubisumaController {
   public String yubisuma01(ModelMap model, Principal prin) {
 
     // ログインユーザ情報
-    User user = userMapper.selectUserByName(prin.getName());
+    int id = userMapper.selectIdByName(prin.getName());
 
     // 入室
-    Room r = roomMapper.selectRoomById(user.getId());
-    if (r == null) {
-      roomMapper.insertUser(roomMapper.countAllUsers(), user.getId());
+    Room user = roomMapper.selectRoomById(id);
+    int max;
+    if (user == null) {
+      if (roomMapper.maxNo() == null)
+        max = 0;
+      else
+        max = (int) roomMapper.maxNo() + 1;
+      roomMapper.insertUser(max, id, prin.getName());
+      user = roomMapper.selectRoomById(id);
     }
 
     ArrayList<Room> room = roomMapper.selectAll();
@@ -63,20 +68,14 @@ public class yubisumaController {
   public String yubisuma02(ModelMap model, Principal prin) {
 
     // ログインユーザ情報
-    User user = userMapper.selectUserByName(prin.getName());
-
-    // no取得
-    int no = roomMapper.selectNoById(user.getId());
+    Room user = roomMapper.selectRoomByName(prin.getName());
 
     // ユーザに対応するDataを追加
     Data d = dataMapper.selectDataById(user.getId());
     if (d == null) {
       dataMapper.insertData(user.getId());
+      d = dataMapper.selectDataById(user.getId());
     }
-
-    // hp取得
-    int hp = dataMapper.selectHpById(user.getId());
-    model.addAttribute("hp", hp);
 
     // ルームリストを取得
     ArrayList<Room> room = roomMapper.selectAll();
@@ -87,93 +86,88 @@ public class yubisumaController {
     model.addAttribute("user", user);
     model.addAttribute("room", room);
     model.addAttribute("userNum", userNum);
-    model.addAttribute("no", no);
+    model.addAttribute("data", d);
     model.addAttribute("oyaNum", oyaNum.getOyaNum());
 
     return "match.html";
   }
 
+  // 2回目以降
   @GetMapping("next")
   public String yubisuma02_1(ModelMap model, Principal prin) {
 
     // ログインユーザ情報
-    User user = userMapper.selectUserByName(prin.getName());
+    Room user = roomMapper.selectRoomByName(prin.getName());
 
-    // no取得
-    int no = roomMapper.selectNoById(user.getId());
-
-    // hp取得
-    int hp = dataMapper.selectHpById(user.getId());
-    model.addAttribute("hp", hp);
+    // ユーザーのデータを取得
+    Data data = dataMapper.selectDataById(user.getId());
 
     // ルームリストを取得
     ArrayList<Room> room = roomMapper.selectAll();
 
-    // ルームに入室している数を取得
-    int userNum = roomMapper.countAllUsers();
-
     int flag = 1;
 
     ArrayList<Data> datalist = dataMapper.selectAll();
-
     for (Data d : datalist) {
       if (d.getFlag() == 0) {
         flag = 0;
         break;
       }
     }
+    // ルームに入室している数を取得
+    int userNum = roomMapper.countAllUsers();
+
     if (flag == 1) {
       oyaNum.next(userNum);
       for (Room r : room) {
         dataMapper.updateFlag(r.getId(), 0);
+        data = dataMapper.selectDataById(user.getId());
       }
     }
 
     model.addAttribute("user", user);
     model.addAttribute("room", room);
     model.addAttribute("userNum", userNum);
-    model.addAttribute("no", no);
+    model.addAttribute("data", data);
     model.addAttribute("oyaNum", oyaNum.getOyaNum());
 
     return "match.html";
   }
 
-  // 親
+  // 親の手選択
   @PostMapping("selecthand")
   public String yubisuma03(@RequestParam Integer hit, ModelMap model, Principal prin) {
 
     // ログインユーザ情報
-    User user = userMapper.selectUserByName(prin.getName());
+    int id = userMapper.selectIdByName(prin.getName());
 
     // hitの更新
-    dataMapper.updateHit(user.getId(), hit);
+    dataMapper.updateHit(id, hit);
 
     return "oyahand.html";
   }
 
-  // 子
+  // 判定
   @GetMapping("judge")
   public String yubisuma04(@RequestParam Integer hand, ModelMap model, Principal prin) {
 
     // ログインユーザ情報
-    User user = userMapper.selectUserByName(prin.getName());
+    Room user = roomMapper.selectRoomByName(prin.getName());
+
+    // ルームに入室している数を取得
+    int userNum = roomMapper.countAllUsers();
+
     // handの更新
     dataMapper.updateHand(user.getId(), hand);
-    // noの取得
-    int no = roomMapper.selectNoById(user.getId());
-    // hpの取得
-    int hp = dataMapper.selectHpById(user.getId());
-    // 手の数の合計の取得
+
     int handsNum = dataMapper.selectSumHands();
 
-    String txt = "";
+    String result = "";
+
+    dataMapper.updateFlag(user.getId(), 1);
 
     int flag = 1;
-
-    dataMapper.updateFlag(user.getId(), flag);
-
     ArrayList<Data> datalist = dataMapper.selectAll();
-
     for (Data d : datalist) {
       if (d.getFlag() == 0) {
         flag = 0;
@@ -181,29 +175,33 @@ public class yubisumaController {
       }
     }
 
-    if (no == oyaNum.getOyaNum() && flag == 1) {
-      // hitの取得
-      int hit = dataMapper.selectHitById(user.getId());
+    // ユーザーのデータを取得
+    Data data = dataMapper.selectDataById(user.getId());
 
-      if (hit == handsNum) {
-        txt = "当たり";
+    if (user.getNo() == oyaNum.getOyaNum() && flag == 1) {
+      if (data.getHit() == handsNum) {
+        result = "当たり";
 
         // hpを1減らす
-        dataMapper.updateHp(user.getId(), --hp);
+        dataMapper.updateHp(user.getId(), data.getHp() - 1);
+        data = dataMapper.selectDataById(user.getId());
       } else {
-        txt = "はずれ";
+        result = "はずれ";
       }
     }
 
+    if (user.getNo() == oyaNum.getOyaNum()) {
+      int oyaHit = data.getHit();
+      model.addAttribute("oyaHit", oyaHit);
+    }
+
     model.addAttribute("user", user);
-    model.addAttribute("no", no);
-    model.addAttribute("txt", txt);
-    model.addAttribute("hp", hp);
-    model.addAttribute("hand", hand);
+    model.addAttribute("data", data);
+    model.addAttribute("result", result);
     model.addAttribute("handsNum", handsNum);
     model.addAttribute("flag", flag);
+    model.addAttribute("userNum", userNum);
 
     return "judge.html";
   }
-
 }
