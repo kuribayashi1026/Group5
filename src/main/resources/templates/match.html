@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="3; URL=/yubisuma/next">
 </head>
 
 <body>
@@ -16,6 +17,7 @@
     <li>ID: [[${user.id}]]</li>
     <li>Name: [[${user.name}]]</li>
     <li>残りの手の数: [[${data.hp}]]</li>
+    <li>oyaNum: [[${oyaNum}]]</li>
   </ul>
 
   <div th:if="${room}">
@@ -27,24 +29,25 @@
         <th>ID</th>
         <th>Name</th>
       </tr>
-      <tr th:each="i : ${#numbers.sequence(room.size() - 1, 0, -1)}">
-          <td align="center">[[${room[i].no}]]</td>
-          <td align="center">[[${room[i].id}]]</td>
-          <td align="center">[[${room[i].name}]]</td>
-        </tr>
-      </table>
-    </div>
+      <tr th:each="r : ${room}">
+        <td align="center">[[${r.no}]]</td>
+        <td align="center">[[${r.id}]]</td>
+        <td align="center">[[${r.name}]]</td>
+      </tr>
+    </table>
+  </div>
 
 
   <div th:if="(${user.no} ne ${oyaNum})">
     <p>あなたが上げる指の数を選んでください</p>
     <a th:href="@{/yubisuma/judge(hand=0)}">[0]</a>
     <a th:href="@{/yubisuma/judge(hand=1)}">[1]</a>
-    <a th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
+    <a th:if="${data.hp} eq 2" th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
   </div>
 
   <div th:if="(${user.no} eq ${oyaNum})">
     <p>あなたは親です<br>指の数を当ててください</p>
+    <p th:if="${sumHp}">指の数の合計は[[${sumHp}]]です<br>この数以下の数字を選んでください</p>
     <form action="/yubisuma/selecthand" method="post">
       <input type="number" name="hit">
       <input type="submit" value="決定">

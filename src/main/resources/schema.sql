@@ -12,10 +12,6 @@ CREATE TABLE data (
     hp INT NOT NULL,
     hand INT,
     hit INT,
-    flag INT
-);
-CREATE TABLE talk (
-    id INT PRIMARY KEY,
-    name CHAR,
-    talk CHAR
+    isActed BOOLEAN,
+    isNext BOOLEAN
 );

@@ -1,5 +1,6 @@
 package group5.number_hit.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -9,12 +10,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Sample3AuthConfiguration
- */
 @Configuration
 @EnableWebSecurity
-public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
+public class Gorup5AuthConfiguration extends WebSecurityConfigurerAdapter {
+
+  @Autowired
+  private MyLogoutHandler myLogoutHandler;
 
   /**
    * 誰がログインできるか(認証処理)
@@ -47,27 +48,16 @@ public class Sample3AuthConfiguration extends WebSecurityConfigurerAdapter {
     // Spring Securityのフォームを利用してログインを行う
     http.formLogin();
 
-    // http://localhost:8000/sample3 で始まるURLへのアクセスはログインが必要
-    // antMatchers().authenticated がantMatchersへのアクセスに認証を行うことを示す
-    // antMatchers()の他にanyRequest()と書くとあらゆるアクセス先を表現できる
-    // authenticated()の代わりにpermitAll()と書くと認証処理が不要であることを示す
-
     http.authorizeRequests().antMatchers("/yubisuma/**").authenticated();
-    http.authorizeRequests().antMatchers("/yubisuma_async/**").authenticated();
-    http.authorizeRequests().antMatchers("/chat/**").authenticated();
 
-    // http.authorizeRequests().anyRequest().authenticated();
-
-    /**
-     * 以下2行はh2-consoleを利用するための設定なので，開発が完了したらコメントアウトすることが望ましい
-     * CSRFがONになっているとフォームが対応していないためアクセスできない
-     * HTTPヘッダのX-Frame-OptionsがDENYになるとiframeでlocalhostでのアプリが使えなくなるので，H2DBのWebクライアントのためだけにdisableにする必要がある
-     */
+    // 完成版は以下二行をコメントアウト
     http.csrf().disable();
     http.headers().frameOptions().disable();
 
     // Spring Securityの機能を利用してログアウト．ログアウト時は http://localhost:8080/ に戻る
-    http.logout().logoutSuccessUrl("/");
+    // ログアウト時にデータベースから削除する処理をMyLogoutHandlerにて実装
+    http.logout().addLogoutHandler(myLogoutHandler).logoutSuccessUrl("/");
+
   }
 
 }

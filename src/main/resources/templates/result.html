@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="15; URL=/logout">
+</head>
+
+<body>
+  <h1>Yubisuma</h1>
+
+  <div th:if="${isOya}">
+    <p>おめでとうございます<br>あなたの勝利です！</p>
+    <!--
+      <img src="../win.jpg" alt="" title="" width="600">
+    -->
+  </div>
+
+  <div th:if="not ${isOya}">
+    <p>残念、負けです<br>"[[${oya.name}]]"さんが勝利しました</p>
+    <!--
+      <img src="../lose.jpg" alt="" title="" width="600">
+    -->
+  </div>
+
+  <a href="/logout">ログアウトしてもどる</a>
+</body>
+
+</html>
