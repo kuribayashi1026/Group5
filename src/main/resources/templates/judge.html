@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="refresh" content="3; URL=/yubisuma/judge">
 </head>
 
 <body>
@@ -10,23 +11,27 @@
 
   <h1>Yubisuma</h1>
 
-  <p>あなたは</p>
+  <p>あなたは,
+    <span th:if="${isOya}"><span font-size="+1">親</span>です</span>
+    <span th:if="not ${isOya}"><span font-size="+1">子</span>です</span>
+  </p>
   <ul>
     <li>NO: [[${user.no}]]</li>
     <li>ID: [[${user.id}]]</li>
     <li>Name: [[${user.name}]]</li>
     <li>残りの手の数: [[${data.hp}]]</li>
     <li>自分が上げた手: [[${data.hand}]]</li>
-    <li th:if="${oyaHit}">予想した手の数: [[${oyaHit}]]</li>
-    <li>手の数の合計:[[${handsNum}]]</li>
+    <li th:if="${oyaHit}">親が予想した手の数: [[${oyaHit}]]</li>
+    <li th:if="${handsNum}">指の数の合計:[[${handsNum}]]</li>
   </ul>
 
-  <div th:if="${flag}">
-    <p>[[${result}]]</p>
-    <div th:if="(${v} eq 1)">
-      <a href="/index.html">最初へ</a>
+  <div th:if="${isJudged}">
+    <p th:if="${result}">親の[[${result}]]です</p>
+    <div th:if="${isEnd}">
+      <p>親が勝利しました</p>
+      <a href="/yubisuma/result">結果へ</a>
     </div>
-    <div th:if="${v} eq 0">
+    <div th:if=" not ${isEnd}">
       <a href="/yubisuma/next">次へ</a>
     </div>
   </div>

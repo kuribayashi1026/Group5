@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <a href="/logout">ログアウト</a>
+
+  <h1>Yubisuma</h1>
+
+  <p>あなたが上げる指の数を選んでください</p>
+  <a th:href="@{/yubisuma/judge(hand=0)}">[0]</a>
+  <a th:href="@{/yubisuma/judge(hand=1)}">[1]</a>
+  <a th:if="${hp} eq 2" th:href="@{/yubisuma/judge(hand=2)}">[2]</a>
+</body>
+
+</html>

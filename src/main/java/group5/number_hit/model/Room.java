@@ -1,7 +1,7 @@
 package group5.number_hit.model;
 
 public class Room {
-  // ユーザーID
+  // ユーザーNO ルームでの入室順を示す
   private int no;
   private int id;
   private String name;

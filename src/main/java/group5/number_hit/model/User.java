@@ -7,14 +7,6 @@ public class User {
   // 名前
   private String name;
 
-  public User() {
-  }
-
-  public User(int id, String name) {
-    setId(id);
-    setName(name);
-  }
-
   public int getId() {
     return id;
   }
